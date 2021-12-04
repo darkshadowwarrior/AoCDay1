@@ -1,17 +1,18 @@
 ﻿using NUnit.Framework;
-using System.Linq;
 
 namespace Aoc1
 {
-    
+
     public class AoCDay1
     {
         private InputParser _parser;
+        private FileReader _fileReader;
         
         [SetUp]
         public void Setup()
         {
             _parser = new InputParser();
+            _fileReader = new FileReader();
         }
 
         [Test]
@@ -39,9 +40,9 @@ namespace Aoc1
         [Test]
         public void GivenASetOfNineInputs_ShouldGiveSevens()
         {
-
-
-            var result = _parser.ReadLinesFromFile("input.txt");
+            var lines = _fileReader.ReadLinesFromFile("input.txt");
+            var input = _parser.ConvertInputLinesToInts(lines);
+            var result = _parser.GetTotalIncreaseCount(input);
 
             Assert.That(result, Is.EqualTo(1653));
         }
@@ -73,45 +74,6 @@ namespace Aoc1
         }
 
 
-    }
-
-    public class InputParser
-    {
-        public int GetTotalIncreaseCount(List<int> input)
-        {
-            var count = 0;
-            var sum1 = 0;
-            var sum2 = 0;
-
-            for(var i = 0; i < input.Count - 2; i++)
-            {
-                if(i == 0)
-                {
-                    sum1 = input[i] + input[i+1] + input[i+2];
-                } else
-                {
-                    sum2 = input[i] + input[i + 1] + input[i + 2];
-                    if (sum2 > sum1)
-                        count++;
-
-                    sum1 = sum2;
-                }
-            }
-
-            return count;
-        }
-
-        public int ReadLinesFromFile(string path)
-        {
-            var lines = (File.ReadAllLines(path));
-            var list = new List<int>();
-            foreach(var line in lines)
-            {
-                list.Add(Int32.Parse(line));
-            }
-
-            return GetTotalIncreaseCount(list);
-        }
     }
 
 }
